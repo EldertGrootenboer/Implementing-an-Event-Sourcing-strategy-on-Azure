@@ -12,7 +12,7 @@ In the demo we will show how we can use order events to fill our data store. Bel
 
 ```json
 {
-    "orderNumber": 12345,
+    "orderNumber": "1b8211e0-f1b6-4261-8487-58a065ab1613",
     "orderStatus": "ACCEPTED",
     "hubId": 258,
     "customer": {
