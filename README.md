@@ -1,0 +1,1 @@
+# Implementing-an-Event-Sourcing-strategy-on-Azure
