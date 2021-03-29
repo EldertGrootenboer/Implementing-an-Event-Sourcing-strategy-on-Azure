@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <appSettings>
+    <add key ="caCertLocation" value=".\cacert.pem"/>
+    <add key="eventHubsNamespaceURL" value="{eventhubsnamespace}.servicebus.windows.net:9093"/>
+    <add key="eventHubName" value="{eventhubname}"/>
+    <add key="consumerGroup" value="{consumergroup}"/>
+    <add key="eventHubsConnStr" value="Endpoint=sb://{eventhubsnamespace}.servicebus.windows.net/;SharedAccessKeyName={policyname};SharedAccessKey={sharedaccesskey};EntityPath={eventhubname}"/>
+  </appSettings>
+</configuration>
