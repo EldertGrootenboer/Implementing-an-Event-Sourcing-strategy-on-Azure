@@ -141,6 +141,7 @@ namespace EventHubKafkaSample
                 };
 
                 await SubmitAndWait(order);
+                return;
             }
 
             #endregion
