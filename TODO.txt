@@ -1,0 +1,33 @@
+Orders
+Cloudevents
+
+Cosmos DB opzetten en vullen met events als start situatie voor Olena
+
+Slides in Cosmos Conf style
+
+Guthub repo opzetten
+
+JSON schema opzetten
+
+Materialized view:
+Amount of Orders
+Amount of articles sold per hub
+
+ordernumber
+order status
+hub id
+customer {
+customerid
+deliver address
+}
+delivery {
+deliverydate
+picking start and end time
+picking status
+}
+orderrows -> artikelen {
+orderid
+article id
+quantity
+price
+}
