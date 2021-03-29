@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 public class Order
 {
-    public DateTime? eventTime {get; set;}
+    public DateTime eventTime {get; set;}
     public string orderNumber { get; set; }
     public string orderStatus { get; set; }
     public int hubId { get; set; }

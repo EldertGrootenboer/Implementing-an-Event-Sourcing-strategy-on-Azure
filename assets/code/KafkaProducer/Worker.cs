@@ -59,6 +59,7 @@ namespace EventHubKafkaSample
             // Create order
             var order = new Order
             {
+                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
                 orderStatus = "REQUESTED",
                 hubId = hubId,
@@ -96,7 +97,9 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
+                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
+                hubId = hubId,
                 orderStatus = "ACCEPTED"
             };
 
@@ -110,7 +113,9 @@ namespace EventHubKafkaSample
             {
                 order = new Order
                 {
-                    orderNumber = orderNumber
+                    eventTime = DateTime.Now,
+                    orderNumber = orderNumber,
+                    hubId = hubId
                 };
 
                 // Add articles
@@ -136,7 +141,9 @@ namespace EventHubKafkaSample
             {
                 order = new Order
                 {
+                    eventTime = DateTime.Now,
                     orderNumber = orderNumber,
+                    hubId = hubId,
                     orderStatus = "CANCELLED"
                 };
 
@@ -150,7 +157,9 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
+                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
+                hubId = hubId,
                 orderStatus = "PICKING",
                 delivery = new Delivery
                 {
@@ -166,7 +175,9 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
+                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
+                hubId = hubId,
                 orderStatus = "DELIVERING",
                 delivery = new Delivery
                 {
@@ -183,7 +194,9 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
+                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
+                hubId = hubId,
                 orderStatus = "DELIVERED"
             };
 
@@ -194,7 +207,12 @@ namespace EventHubKafkaSample
 
         private static async Task SubmitAndWait(Order order)
         {
-            var message = JsonConvert.SerializeObject(order);
+            var message = JsonConvert.SerializeObject(order,
+                             Newtonsoft.Json.Formatting.None,
+                            new JsonSerializerSettings
+                            {
+                                NullValueHandling = NullValueHandling.Ignore
+                            });
             await _producer.ProduceAsync(_topicName, null, message);
             Console.WriteLine(string.Format($"Order {order.orderNumber} sent."));
             Thread.Sleep(new Random().Next(1000, 60000));
