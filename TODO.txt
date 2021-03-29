@@ -1,4 +1,4 @@
-Cosmos DB opzetten en vullen met events als start situatie voor Olena
+Partition key on ordernumber
 
 Materialized view:
 Amount of Orders
