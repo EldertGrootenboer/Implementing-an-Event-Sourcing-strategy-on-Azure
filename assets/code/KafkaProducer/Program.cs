@@ -16,11 +16,6 @@ namespace EventHubKafkaSample
             Console.WriteLine("Initiating Producer");
             Console.WriteLine("");
             Worker.Producer(brokerList, password, topicName, caCertLocation).Wait();
-            Console.WriteLine("Initiating Consumer");
-            Console.WriteLine("");
-            Worker.Consumer(brokerList, password, consumerGroup, topicName, caCertLocation);
-            Console.ReadKey();
-
         }
     }
 }

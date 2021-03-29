@@ -13,7 +13,7 @@ In the demo we will show how we can use order events to fill our data store. Bel
 ```json
 {
     "orderNumber": "1b8211e0-f1b6-4261-8487-58a065ab1613",
-    "orderStatus": "ACCEPTED",
+    "orderStatus": "REQUESTED",
     "hubId": 258,
     "customer": {
         "customerId": 321,
@@ -27,19 +27,18 @@ In the demo we will show how we can use order events to fill our data store. Bel
     "delivery": {
         "plannedDeliveryTime": "13-04-2021 19:00",
         "pickingStartTime": "13-04-2021 17:00",
-        "pickingEndTime": null,
-        "pickingStatus": "INPROGRESS"
+        "pickingEndTime": null
     },
     "articles": [
         {
-            "articleId": 369852,
+            "article": "Coca-Cola Cherry",
             "quantity": 5,
-            "price": 19.95
+            "price": 2.95
         },
         {
-            "articleId": 145875,
+            "article": "Jim Bean",
             "quantity": 1,
-            "price": 99.95
+            "price": 9.95
         }
     ]
 }
