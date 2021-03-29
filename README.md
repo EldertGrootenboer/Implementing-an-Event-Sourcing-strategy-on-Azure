@@ -12,6 +12,7 @@ In the demo we will show how we can use order events to fill our data store. Bel
 
 ```json
 {
+    "id": "6a0597ae-c137-45a8-932b-45994341dce6",
     "eventTime": "2021-03-29T17:07:15.8743603+02:00",
     "orderNumber": "1b8211e0-f1b6-4261-8487-58a065ab1613",
     "orderStatus": "REQUESTED",

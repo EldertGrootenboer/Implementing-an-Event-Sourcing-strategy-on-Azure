@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
@@ -15,14 +16,24 @@ namespace EPH.Functions
         [FunctionName("EventHubsProcessor")]
         public static async Task Run(
             [EventHubTrigger("orders", Connection = "implementingeventsourcingstrategy")] EventData[] events,
-            [CosmosDB(
-                databaseName: "warehouse",
-                collectionName: "orders",
-                ConnectionStringSetting = "CosmosDBConnection")]
-                IAsyncCollector<Order> ordersOut,
             ILogger log)
         {
             var exceptions = new List<Exception>();
+
+            var client = new CosmosClient(
+                Environment.GetEnvironmentVariable("CosmosDBConnection"),
+                new CosmosClientOptions()
+                {
+                    SerializerOptions = new CosmosSerializationOptions()
+                    {
+                        IgnoreNullValues = true
+                    }
+                });
+
+            var database = await client.CreateDatabaseIfNotExistsAsync(Environment.GetEnvironmentVariable("CosmosDBDatabase"));
+            var container = await database.Database.CreateContainerIfNotExistsAsync(
+                Environment.GetEnvironmentVariable("CosmosDBContainer"),
+                Environment.GetEnvironmentVariable("CosmosDBPartitionKey"));
 
             foreach (EventData eventData in events)
             {
@@ -30,8 +41,16 @@ namespace EPH.Functions
                 {
                     string messageBody = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
                     log.LogInformation($"C# Event Hub trigger function processed a message: {messageBody}");
-                    var order = JsonConvert.DeserializeObject<Order>(messageBody);
-                    await ordersOut.AddAsync(order);
+                    var order = JsonConvert.DeserializeObject<Order>(
+                        messageBody,
+                        new JsonSerializerSettings
+                        {
+                            NullValueHandling = NullValueHandling.Ignore,
+                            MissingMemberHandling = MissingMemberHandling.Ignore,
+                            DefaultValueHandling = DefaultValueHandling.Ignore
+                        });
+
+                    await container.Container.UpsertItemAsync(order);
                 }
                 catch (Exception e)
                 {

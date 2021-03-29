@@ -59,7 +59,6 @@ namespace EventHubKafkaSample
             // Create order
             var order = new Order
             {
-                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
                 orderStatus = "REQUESTED",
                 hubId = hubId,
@@ -97,7 +96,6 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
-                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
                 hubId = hubId,
                 orderStatus = "ACCEPTED"
@@ -113,7 +111,6 @@ namespace EventHubKafkaSample
             {
                 order = new Order
                 {
-                    eventTime = DateTime.Now,
                     orderNumber = orderNumber,
                     hubId = hubId
                 };
@@ -141,7 +138,6 @@ namespace EventHubKafkaSample
             {
                 order = new Order
                 {
-                    eventTime = DateTime.Now,
                     orderNumber = orderNumber,
                     hubId = hubId,
                     orderStatus = "CANCELLED"
@@ -157,7 +153,6 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
-                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
                 hubId = hubId,
                 orderStatus = "PICKING",
@@ -175,7 +170,6 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
-                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
                 hubId = hubId,
                 orderStatus = "DELIVERING",
@@ -194,7 +188,6 @@ namespace EventHubKafkaSample
 
             order = new Order
             {
-                eventTime = DateTime.Now,
                 orderNumber = orderNumber,
                 hubId = hubId,
                 orderStatus = "DELIVERED"
