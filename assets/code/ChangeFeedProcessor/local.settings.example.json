@@ -1,0 +1,14 @@
+{
+    "IsEncrypted": false,
+    "Values": {
+        "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+        "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+        "CosmosDBConnection": "AccountEndpoint=https://ENDPOINT_NAME.com:443/;AccountKey=ACCOUNT_KEY;",
+        "CosmosDBDatabase": "warehouse",
+        "CosmosDBContainer": "orders",
+        "CustomerContainer": "customers-overview",
+        "CustomerPartitionKey": "/customerId",
+        "HubContainer": "hub-monitoring",
+        "HubPartitionKey": "/partitionKey"
+    }
+}
