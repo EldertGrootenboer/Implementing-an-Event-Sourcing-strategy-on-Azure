@@ -82,7 +82,11 @@ namespace ChangeFeedProcessor
                 else
                 {
                     existingOrder.orderStatus = order.orderStatus;
-                    existingOrder.articles = order.articles;
+
+                    if(order.articles != null)
+                    {
+                        existingOrder.articles = order.articles;
+                    }
                 }
 
                 await customerViewRepository.UpdateDocument(overview);
@@ -113,6 +117,11 @@ namespace ChangeFeedProcessor
             }
             else
             {
+                if (overview.orderNumbers.Contains(order.orderNumber))
+                {
+                    return;
+                }
+
                 ++overview.count;
 
                 await hubOverviewRepository.UpdateDocument(overview);
