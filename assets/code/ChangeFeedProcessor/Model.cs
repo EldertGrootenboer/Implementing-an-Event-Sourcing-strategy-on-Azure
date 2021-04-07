@@ -59,6 +59,7 @@ namespace ChangeFeedProcessor
         public string partitionKey { get; set; }
         public int hubId { get; set; }
         public int count { get; set; }
+        public List<string> orderNumbers { get; set; }
     }
 
     public class OrdersDetails
