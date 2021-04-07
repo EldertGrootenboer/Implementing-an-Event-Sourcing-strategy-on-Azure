@@ -7,9 +7,7 @@ namespace ChangeFeedProcessor
     {
         public HubOverviewRepository(Database database)
         {
-            Container = database.CreateContainerIfNotExistsAsync(
-                Environment.GetEnvironmentVariable("HubContainer"),
-                Environment.GetEnvironmentVariable("HubPartitionKey")).Result;
+            Container = database.CreateContainerIfNotExistsAsync("hub-monitoring", "/partitionKey").Result;
         }
     }
 }

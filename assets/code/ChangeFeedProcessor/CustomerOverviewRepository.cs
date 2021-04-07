@@ -7,9 +7,7 @@ namespace ChangeFeedProcessor
     {
         public CustomerOverviewRepository(Database database)
         {
-            Container = database.CreateContainerIfNotExistsAsync(
-                Environment.GetEnvironmentVariable("CustomerContainer"),
-                Environment.GetEnvironmentVariable("CustomerPartitionKey")).Result.Container;
+            Container = database.CreateContainerIfNotExistsAsync("customers-overview","/customerId").Result.Container;
         }
     }
 }
