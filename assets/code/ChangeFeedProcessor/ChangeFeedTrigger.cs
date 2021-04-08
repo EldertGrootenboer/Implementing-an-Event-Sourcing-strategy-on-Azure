@@ -110,7 +110,8 @@ namespace ChangeFeedProcessor
                 {
                     hubId = order.hubId,
                     count = 1,
-                    partitionKey = partitionKey
+                    partitionKey = partitionKey,
+                    orderNumbers = new List<string>{order.orderNumber}
                 };
 
                 await hubOverviewRepository.CreateDocument(overview);
@@ -123,6 +124,7 @@ namespace ChangeFeedProcessor
                 }
 
                 ++overview.count;
+                overview.orderNumbers.Add(order.orderNumber);
 
                 await hubOverviewRepository.UpdateDocument(overview);
             }
