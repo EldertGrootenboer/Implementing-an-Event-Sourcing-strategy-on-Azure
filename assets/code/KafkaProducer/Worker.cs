@@ -49,10 +49,11 @@ namespace EventHubKafkaSample
         private static async Task ProcessOrder()
         {
             var orderNumber = Guid.NewGuid().ToString();
-            var hubId = new Random().Next(10000, 10100);
+            var hubId = new Random().Next(10000, 10010);
             var updateArticles = new Random().Next(0, 10) > 7;
             var orderCancelled = new Random().Next(0, 10) > 9;
             var lookupIndex = new Random().Next(0, 47);
+            var customerId = new Random().Next(50000, 50100);
 
             #region Order requested
 
@@ -64,7 +65,7 @@ namespace EventHubKafkaSample
                 hubId = hubId,
                 customer = new Customer
                 {
-                    customerId = new Random().Next(50000, 80000),
+                    customerId = customerId,
                     deliveryAddress = new DeliveryAddress
                     {
                         name = Lookups.names[lookupIndex],
@@ -98,7 +99,11 @@ namespace EventHubKafkaSample
             {
                 orderNumber = orderNumber,
                 hubId = hubId,
-                orderStatus = "ACCEPTED"
+                orderStatus = "ACCEPTED",
+                customer = new Customer
+                {
+                    customerId = customerId
+                }
             };
 
             await SubmitAndWait(order);
@@ -112,7 +117,11 @@ namespace EventHubKafkaSample
                 order = new Order
                 {
                     orderNumber = orderNumber,
-                    hubId = hubId
+                    hubId = hubId,
+                    customer = new Customer
+                    {
+                        customerId = customerId
+                    }
                 };
 
                 // Add articles
@@ -140,7 +149,11 @@ namespace EventHubKafkaSample
                 {
                     orderNumber = orderNumber,
                     hubId = hubId,
-                    orderStatus = "CANCELLED"
+                    orderStatus = "CANCELLED",
+                    customer = new Customer
+                    {
+                        customerId = customerId
+                    }
                 };
 
                 await SubmitAndWait(order);
@@ -156,6 +169,10 @@ namespace EventHubKafkaSample
                 orderNumber = orderNumber,
                 hubId = hubId,
                 orderStatus = "PICKING",
+                customer = new Customer
+                {
+                    customerId = customerId
+                },
                 delivery = new Delivery
                 {
                     pickingStartTime = DateTime.Now.ToString("dd-MM-yyyy HH:mm")
@@ -173,6 +190,10 @@ namespace EventHubKafkaSample
                 orderNumber = orderNumber,
                 hubId = hubId,
                 orderStatus = "DELIVERING",
+                customer = new Customer
+                {
+                    customerId = customerId
+                },
                 delivery = new Delivery
                 {
                     pickingEndTime = DateTime.Now.Subtract(new TimeSpan(0, 0, 5)).ToString("dd-MM-yyyy HH:mm"),
@@ -190,7 +211,11 @@ namespace EventHubKafkaSample
             {
                 orderNumber = orderNumber,
                 hubId = hubId,
-                orderStatus = "DELIVERED"
+                orderStatus = "DELIVERED",
+                customer = new Customer
+                {
+                    customerId = customerId
+                }
             };
 
             await SubmitAndWait(order);
