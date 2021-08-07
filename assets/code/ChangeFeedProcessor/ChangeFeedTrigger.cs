@@ -50,46 +50,11 @@ namespace ChangeFeedProcessor
 
             if (overview is null)
             {
-                overview = new CustomerOverview
-                {
-                    count = 1,
-                    customerId = customerId,
-                    orders = new List<OrdersDetails> {
-                        new OrdersDetails
-                    {
-                        articles = order.articles,
-                        orderNumber = order.orderNumber,
-                        orderStatus = order.orderStatus
-                    }}
-                };
-
-                await customerViewRepository.CreateDocument(overview);
+                await CreateCustomerOverview(customerViewRepository, order, customerId);
             }
             else
             {
-                var existingOrder = overview.orders.FirstOrDefault(x => x.orderNumber == order.orderNumber);
-
-                if (existingOrder is null)
-                {
-                    ++overview.count;
-                    overview.orders.Add(new OrdersDetails
-                    {
-                        articles = order.articles,
-                        orderNumber = order.orderNumber,
-                        orderStatus = order.orderStatus
-                    });
-                }
-                else
-                {
-                    existingOrder.orderStatus = order.orderStatus;
-
-                    if(order.articles != null)
-                    {
-                        existingOrder.articles = order.articles;
-                    }
-                }
-
-                await customerViewRepository.UpdateDocument(overview);
+                await UpdateCustomerOverview(customerViewRepository, order, overview);
             }
         }
 
@@ -106,28 +71,91 @@ namespace ChangeFeedProcessor
 
             if (overview is null)
             {
-                overview = new HubOverview
-                {
-                    hubId = order.hubId,
-                    count = 1,
-                    partitionKey = partitionKey,
-                    orderNumbers = new List<string>{order.orderNumber}
-                };
-
-                await hubOverviewRepository.CreateDocument(overview);
+                await CreateHubOverview(hubOverviewRepository, order, partitionKey);
             }
             else
             {
-                if (overview.orderNumbers.Contains(order.orderNumber))
-                {
-                    return;
-                }
-
-                ++overview.count;
-                overview.orderNumbers.Add(order.orderNumber);
-
-                await hubOverviewRepository.UpdateDocument(overview);
+                await UpdateHubOverview(hubOverviewRepository, order, overview);
             }
+        }
+
+        private static async Task UpdateHubOverview(HubOverviewRepository hubOverviewRepository, Order order,
+            HubOverview overview)
+        {
+            if (overview.orderNumbers.Contains(order.orderNumber))
+            {
+                return;
+            }
+
+            ++overview.count;
+            overview.orderNumbers.Add(order.orderNumber);
+
+            await hubOverviewRepository.UpdateDocument(overview);
+        }
+
+        private static async Task CreateHubOverview(HubOverviewRepository hubOverviewRepository, Order order,
+            string partitionKey)
+        {
+            HubOverview overview;
+            overview = new HubOverview
+            {
+                hubId = order.hubId,
+                count = 1,
+                partitionKey = partitionKey,
+                orderNumbers = new List<string> {order.orderNumber}
+            };
+
+            await hubOverviewRepository.CreateDocument(overview);
+        }
+
+        private static async Task UpdateCustomerOverview(CustomerOverviewRepository customerViewRepository, Order order,
+            CustomerOverview overview)
+        {
+            var existingOrder = overview.orders.FirstOrDefault(x => x.orderNumber == order.orderNumber);
+
+            if (existingOrder is null)
+            {
+                ++overview.count;
+                overview.orders.Add(new OrdersDetails
+                {
+                    articles = order.articles,
+                    orderNumber = order.orderNumber,
+                    orderStatus = order.orderStatus
+                });
+            }
+            else
+            {
+                existingOrder.orderStatus = order.orderStatus;
+
+                if (order.articles != null)
+                {
+                    existingOrder.articles = order.articles;
+                }
+            }
+
+            await customerViewRepository.UpdateDocument(overview);
+        }
+
+        private static async Task CreateCustomerOverview(CustomerOverviewRepository customerViewRepository, Order order,
+            string customerId)
+        {
+            CustomerOverview overview;
+            overview = new CustomerOverview
+            {
+                count = 1,
+                customerId = customerId,
+                orders = new List<OrdersDetails>
+                {
+                    new OrdersDetails
+                    {
+                        articles = order.articles,
+                        orderNumber = order.orderNumber,
+                        orderStatus = order.orderStatus
+                    }
+                }
+            };
+
+            await customerViewRepository.CreateDocument(overview);
         }
     }
 }
