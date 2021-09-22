@@ -33,7 +33,7 @@ namespace EventHubKafkaSample
                 _topicName = topicname;
 
                 var tasks = new List<Task>();
-                for (int i = 0; i < 100; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     tasks.Add(ProcessOrder());
                 }
