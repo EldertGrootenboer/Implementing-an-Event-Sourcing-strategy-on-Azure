@@ -16,6 +16,7 @@ namespace EPH.Functions
         [FunctionName("EventHubsProcessor")]
         public static async Task Run(
             [EventHubTrigger("orders", Connection = "implementingeventsourcingstrategy")] EventData[] events,
+            //[CosmosDB(databaseName: "warehouse", collectionName: "orders", ConnectionStringSetting = "CosmosDBConnection")]out dynamic document,
             ILogger log)
         {
             var exceptions = new List<Exception>();
@@ -51,6 +52,7 @@ namespace EPH.Functions
                         });
 
                     await container.Container.UpsertItemAsync(order);
+                    //document = order;
                 }
                 catch (Exception e)
                 {
