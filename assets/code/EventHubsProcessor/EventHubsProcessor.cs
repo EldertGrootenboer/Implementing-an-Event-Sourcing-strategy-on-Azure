@@ -36,11 +36,11 @@ namespace EPH.Functions
                 Environment.GetEnvironmentVariable("CosmosDBContainer"),
                 Environment.GetEnvironmentVariable("CosmosDBPartitionKey"));
 
-            foreach (EventData eventData in events)
+            foreach (var eventData in events)
             {
                 try
                 {
-                    string messageBody = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
+                    var messageBody = Encoding.UTF8.GetString(eventData.Body.Array, eventData.Body.Offset, eventData.Body.Count);
                     log.LogInformation($"C# Event Hub trigger function processed a message: {messageBody}");
                     var order = JsonConvert.DeserializeObject<Order>(
                         messageBody,
