@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace ChangeFeedProcessor
+namespace Demo.Common
 {
     public class Order
     {
@@ -44,7 +44,7 @@ namespace ChangeFeedProcessor
         public double price { get; set; }
     }
 
-    public class CustomerOverview : BaseOverview
+    public class CustomerProjection : BaseProjection
     {
         public override string id => customerId;
         public string customerId { get; set; }
@@ -53,7 +53,7 @@ namespace ChangeFeedProcessor
         public List<OrdersDetails> orders { get; set; }
     }
 
-    public class HubOverview : BaseOverview
+    public class WarehouseProjection : BaseProjection
     {
         public override string id => partitionKey;
         public string partitionKey { get; set; }
@@ -70,7 +70,7 @@ namespace ChangeFeedProcessor
         public List<Article> articles { get; set; }
     }
 
-    public abstract class BaseOverview
+    public abstract class BaseProjection
     {
         public abstract string id { get; }
     }

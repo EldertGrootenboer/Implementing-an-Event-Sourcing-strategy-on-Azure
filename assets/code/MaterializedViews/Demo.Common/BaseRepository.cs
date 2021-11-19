@@ -1,10 +1,9 @@
-using System;
 using System.Threading.Tasks;
 using Microsoft.Azure.Cosmos;
 
-namespace ChangeFeedProcessor
+namespace Demo.Common
 {
-    public class BaseRepository<T> where T : BaseOverview
+    public class BaseRepository<T> where T : BaseProjection
     {
         protected Container Container;
 

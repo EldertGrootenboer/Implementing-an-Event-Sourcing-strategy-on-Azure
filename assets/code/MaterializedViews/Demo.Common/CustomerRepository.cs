@@ -1,11 +1,10 @@
-using System;
 using Microsoft.Azure.Cosmos;
 
-namespace ChangeFeedProcessor
+namespace Demo.Common
 {
-    public class CustomerOverviewRepository : BaseRepository<CustomerOverview>
+    public class CustomerRepository : BaseRepository<CustomerProjection>
     {
-        public CustomerOverviewRepository(Database database)
+        public CustomerRepository(Database database)
         {
             Container = database.CreateContainerIfNotExistsAsync("customers-overview","/customerId").Result.Container;
         }

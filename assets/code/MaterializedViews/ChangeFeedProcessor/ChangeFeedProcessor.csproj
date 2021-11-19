@@ -20,4 +20,7 @@
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
     </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\Demo.Common\Demo.Common.csproj" />
+    </ItemGroup>
 </Project>

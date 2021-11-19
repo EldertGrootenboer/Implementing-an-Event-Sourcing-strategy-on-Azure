@@ -1,11 +1,10 @@
-using System;
 using Microsoft.Azure.Cosmos;
 
-namespace ChangeFeedProcessor
+namespace Demo.Common
 {
-    public class HubOverviewRepository : BaseRepository<HubOverview>
+    public class WarehouseRepository : BaseRepository<WarehouseProjection>
     {
-        public HubOverviewRepository(Database database)
+        public WarehouseRepository(Database database)
         {
             Container = database.CreateContainerIfNotExistsAsync("hub-monitoring", "/partitionKey").Result;
         }
