@@ -11,6 +11,16 @@ using Newtonsoft.Json;
 
 namespace EPH.Functions
 {
+    private static CosmosClient client = new CosmosClient(
+         Environment.GetEnvironmentVariable("CosmosDBConnection"),
+         new CosmosClientOptions()
+         {
+             SerializerOptions = new CosmosSerializationOptions()
+             {
+                 IgnoreNullValues = true
+             }
+         });
+
     public static class EventHubsProcessor
     {
         [FunctionName("EventHubsProcessor")]
@@ -20,16 +30,6 @@ namespace EPH.Functions
             ILogger log)
         {
             var exceptions = new List<Exception>();
-
-            var client = new CosmosClient(
-                Environment.GetEnvironmentVariable("CosmosDBConnection"),
-                new CosmosClientOptions()
-                {
-                    SerializerOptions = new CosmosSerializationOptions()
-                    {
-                        IgnoreNullValues = true
-                    }
-                });
 
             var database = await client.CreateDatabaseIfNotExistsAsync(Environment.GetEnvironmentVariable("CosmosDBDatabase"));
             var container = await database.Database.CreateContainerIfNotExistsAsync(
