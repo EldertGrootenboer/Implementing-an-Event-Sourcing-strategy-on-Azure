@@ -35,19 +35,35 @@ namespace EPH.Functions
             var container = database.GetContainer(Environment.GetEnvironmentVariable("CosmosDBContainer"));
 
             // Retrieve order from Cosmos DB
-            var sqlQueryText = $"SELECT * FROM c WHERE c.orderNumber = {eventGridEvent.Data.ToString()} AND c.orderStatus = 'REQUESTED'";
+            var sqlQueryText = $"SELECT * FROM c WHERE c.orderNumber = {eventGridEvent.Data.ToString()}";
             QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
             using FeedIterator<Order> queryResultSetIterator = container.GetItemQueryIterator<Order>(queryDefinition);
-            message = new ServiceBusMessage("test");
+            message = new ServiceBusMessage();
+            var order = new Order();
 
             while (queryResultSetIterator.HasMoreResults)
             {
                 FeedResponse<Order> currentResultSet = queryResultSetIterator.ReadNextAsync().GetAwaiter().GetResult();
                 foreach (Order orderUpdate in currentResultSet)
                 {
-                    // Send message to Service Bus
-                    orderUpdate.orderStatus = "DELIVERED";
-                    message = new ServiceBusMessage(JsonConvert.SerializeObject(orderUpdate));
+                    switch(orderUpdate.orderStatus)
+                    {
+                        case "REQUESTED":
+                            order = orderUpdate;
+                        break;
+                        case "PICKING":
+                            order.delivery = orderUpdate.delivery;
+                        break;
+                        case "DELIVERING":
+                            order.delivery.pickingEndTime = orderUpdate.delivery.pickingEndTime;
+                            order.delivery.plannedDeliveryTime = orderUpdate.delivery.plannedDeliveryTime;
+                        break;
+                        default:
+                            order.orderStatus = orderUpdate.orderStatus;
+                        break;
+                    }
+                    
+                    message = new ServiceBusMessage(JsonConvert.SerializeObject(order));
                 }
             }
         }
