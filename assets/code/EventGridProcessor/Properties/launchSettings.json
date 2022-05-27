@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "EventGridProcessor": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7206",
+      "launchBrowser": false
+    }
+  }
+}

@@ -3,30 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Messaging.EventGrid;
 using Microsoft.Azure.Cosmos;
 using Microsoft.Azure.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
+using Microsoft.Azure.WebJobs.Extensions.EventGrid;
 using Newtonsoft.Json;
 
 namespace EPH.Functions
 {
-    private static CosmosClient client = new CosmosClient(
-         Environment.GetEnvironmentVariable("CosmosDBConnection"),
-         new CosmosClientOptions()
-         {
-             SerializerOptions = new CosmosSerializationOptions()
-             {
-                 IgnoreNullValues = true
-             }
-         });
-
     public static class EventHubsProcessor
     {
+        private static CosmosClient client = new CosmosClient(
+             Environment.GetEnvironmentVariable("CosmosDBConnection"),
+             new CosmosClientOptions()
+             {
+                 SerializerOptions = new CosmosSerializationOptions()
+                 {
+                     IgnoreNullValues = true
+                 }
+             });
+
         [FunctionName("EventHubsProcessor")]
         public static async Task Run(
             [EventHubTrigger("orders", Connection = "implementingeventsourcingstrategy")] EventData[] events,
             //[CosmosDB(databaseName: "warehouse", collectionName: "orders", ConnectionStringSetting = "CosmosDBConnection")]out dynamic document,
+            [EventGrid(TopicEndpointUri = "EventGridEndpoint", TopicKeySetting = "EventGridKey")] IAsyncCollector<EventGridEvent> eventCollector,
             ILogger log)
         {
             var exceptions = new List<Exception>();
@@ -53,6 +56,11 @@ namespace EPH.Functions
 
                     await container.Container.UpsertItemAsync(order);
                     //document = order;
+                    if (order.orderStatus == "DELIVERED")
+                    {
+                        var eventGridEvent = new EventGridEvent("orders", "delivered", "1.0", order.orderNumber);
+                       await eventCollector.AddAsync(eventGridEvent);
+                    }
                 }
                 catch (Exception e)
                 {
