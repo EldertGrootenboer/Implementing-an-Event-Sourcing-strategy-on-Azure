@@ -4,6 +4,8 @@ In recent years the Event Sourcing pattern has become increasingly popular. By s
 
 In this demo-heavy session you will learn how we can use Azure Event Hubs to process and store these events to build our own event store based on Cosmos DB. Moreover, we will also dive into options around connecting to other Azure services and even Kafka applications to easily implement this popular pattern in our own solutions.
 
+Video: https://learn.microsoft.com/en-us/events/azure-cosmos-db-azure-cosmos-db-conf/implementing-an-event-sourcing-strategy-on-azure
+
 ## Orders
 
 In the demo we will show how we can use order events to fill our data store. Below is an example of such an event.
