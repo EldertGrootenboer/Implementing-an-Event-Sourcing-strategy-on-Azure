@@ -33,7 +33,7 @@ namespace EventHubKafkaSample
                 _topicName = topicname;
 
                 var tasks = new List<Task>();
-                for (int i = 0; i < 5; i++)
+                for (int i = 0; i < 1000; i++)
                 {
                     tasks.Add(ProcessOrder());
                 }
@@ -233,7 +233,7 @@ namespace EventHubKafkaSample
                             });
             await _producer.ProduceAsync(_topicName, null, message);
             Console.WriteLine(string.Format($"Order {order.orderNumber} sent."));
-            Thread.Sleep(new Random().Next(1000, 60000));
+            Thread.Sleep(new Random().Next(1000, 2000));
         }
     }
 }

@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class Order
 {
-    public Guid id { get; }
-    public DateTime eventTime { get; }
+    public Guid? id { get; set; }
+    public DateTime? eventTime { get; set; }
     public string orderNumber { get; set; }
     public string orderStatus { get; set; }
     public int hubId { get; set; }

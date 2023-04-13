@@ -46,24 +46,27 @@ namespace EPH.Functions
                 FeedResponse<Order> currentResultSet = queryResultSetIterator.ReadNextAsync().GetAwaiter().GetResult();
                 foreach (Order orderUpdate in currentResultSet)
                 {
-                    switch(orderUpdate.orderStatus)
+                    switch (orderUpdate.orderStatus)
                     {
                         case "REQUESTED":
                             order = orderUpdate;
-                        break;
+                            break;
                         case "PICKING":
                             order.delivery = orderUpdate.delivery;
-                        break;
+                            break;
                         case "DELIVERING":
                             order.delivery.pickingEndTime = orderUpdate.delivery.pickingEndTime;
                             order.delivery.plannedDeliveryTime = orderUpdate.delivery.plannedDeliveryTime;
-                        break;
+                            break;
                         default:
                             order.orderStatus = orderUpdate.orderStatus;
-                        break;
+                            break;
                     }
-                    
-                    message = new ServiceBusMessage(JsonConvert.SerializeObject(order));
+
+                    order.id = null;
+                    order.eventTime = null;
+
+                    message = new ServiceBusMessage(JsonConvert.SerializeObject(order, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore }));
                 }
             }
         }
